@@ -1,0 +1,63 @@
+# Publica el sitio en el hosting por FTP.
+# Se ejecuta con cada cambio en main y también a mano
+# (Actions › Publicar sitio › Run workflow).
+# Antes de subir, guarda un respaldo de las páginas que se van a reemplazar
+# (Actions › la ejecución › Artifacts › respaldo-sitio).
+#
+# Secrets necesarios (Settings › Secrets and variables › Actions):
+#   FTP_SERVER      ej. ftp.x360.com.mx
+#   FTP_USERNAME    usuario FTP
+#   FTP_PASSWORD    contraseña FTP
+#   FTP_SERVER_DIR  carpeta del sitio en el servidor, con / al final (ej. public_html/)
+
+name: Publicar sitio
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Respaldar páginas actuales del sitio
+        run: |
+          mkdir -p respaldo
+          for f in "" index.html .htaccess 404.html robots.txt sitemap.xml; do
+            name="${f:-inicio.html}"; name="${name#.}"
+            curl -fsSL --max-time 30 "https://x360.com.mx/$f" -o "respaldo/${name//\//_}" || echo "No existe: /$f"
+          done
+          ls -la respaldo
+
+      - name: Guardar respaldo
+        uses: actions/upload-artifact@v4
+        with:
+          name: respaldo-sitio-${{ github.run_number }}
+          path: respaldo/
+          retention-days: 90
+
+      - name: Subir por FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          protocol: ftps
+          # Solo sube y borra lo que este flujo haya subido antes:
+          # las fotos que ya están en el servidor (img/) no se tocan.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            .github/**
+            README.md
+            img/LEEME.txt
+            respaldo/**
