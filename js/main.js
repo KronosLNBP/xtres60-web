@@ -102,3 +102,46 @@
   var year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 })();
+
+// Formulario de cotización de redes sociales (redes-sociales.html)
+(function () {
+  'use strict';
+  var form = document.getElementById('redes-form');
+  if (!form) return;
+  var cfg = window.X3_CONFIG || {};
+  var number = String(cfg.whatsapp || '').replace(/\D/g, '');
+  var fields = document.getElementById('redes-fields');
+  var success = document.getElementById('redes-success');
+  var error = document.getElementById('redes-error');
+  var retry = document.getElementById('redes-retry');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = form.nombre.value.trim();
+    var tel = form.whatsapp.value.replace(/\D/g, '');
+    var okNombre = nombre.length >= 2;
+    var okTel = tel.length >= 10;
+    form.nombre.setAttribute('aria-invalid', String(!okNombre));
+    form.whatsapp.setAttribute('aria-invalid', String(!okTel));
+    if (!(okNombre && okTel)) {
+      error.hidden = false;
+      (okNombre ? form.whatsapp : form.nombre).focus();
+      return;
+    }
+    error.hidden = true;
+    var marca = form.marca.value.trim();
+    var redes = form.redes.value.trim();
+    var mensaje = form.mensaje.value.trim();
+    var text = 'Hola XTres60, quiero cotizar la gestión de redes sociales.\n' +
+      'Nombre: ' + nombre + '\n' +
+      (marca ? 'Marca: ' + marca + '\n' : '') +
+      'WhatsApp: ' + tel +
+      (redes ? '\nRedes que uso: ' + redes : '') +
+      (mensaje ? '\nObjetivo: ' + mensaje : '');
+    var url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(text);
+    if (retry) retry.href = url;
+    fields.hidden = true;
+    success.hidden = false;
+    window.open(url, '_blank', 'noopener');
+  });
+})();
