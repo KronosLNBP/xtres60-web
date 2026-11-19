@@ -260,3 +260,17 @@ button, input, select, textarea { font: inherit; }
   .rs-title { letter-spacing: -1.5px; }
   .hero-ctas .btn { width: 100%; white-space: normal; text-align: center; }
 }
+
+/* Página de desarrollo web (desarrollo-web.html) */
+#casos-web .section-head .lead { max-width: 400px; }
+
+/* Bloque "También te puede interesar" (páginas internas) */
+.related { padding-top: 24px; }
+.related h2 { margin-bottom: 32px; }
+.related-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
+.related-card { height: 100%; display: flex; flex-direction: column; gap: 10px; padding: 28px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .15s ease, transform .15s ease; }
+.related-card:hover, .related-card:focus-visible { border-color: var(--orange); color: var(--text); transform: translateY(-2px); }
+.related-kicker { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange-2); }
+.related-card strong { font-family: var(--font-display); font-size: 23px; font-weight: 700; }
+.related-text { color: var(--muted); font-size: 15px; line-height: 1.6; flex: 1; }
+.related-go { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--orange-2); }

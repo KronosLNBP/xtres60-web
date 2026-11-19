@@ -8,6 +8,8 @@ Sitio estático (HTML, CSS y JavaScript, sin compilación). Reemplaza la app de 
 
 ```
 index.html                 Página de inicio
+redes-sociales.html        Servicio de gestión de redes sociales (cotización por WhatsApp)
+desarrollo-web.html        Servicio de desarrollo web y software (casos y cotización por WhatsApp)
 aviso-de-privacidad.html   Aviso de privacidad
 404.html                   Página de error
 .htaccess                  Página 404 y redirecciones de las rutas anteriores (/servicios, /contacto)
