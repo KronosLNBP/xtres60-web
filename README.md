@@ -10,15 +10,25 @@ Sitio estático (HTML, CSS y JavaScript, sin compilación). Reemplaza la app de 
 index.html                 Página de inicio
 redes-sociales.html        Servicio de gestión de redes sociales (cotización por WhatsApp)
 desarrollo-web.html        Servicio de desarrollo web y software (casos y cotización por WhatsApp)
+produccion-audiovisual.html  Servicio de producción audiovisual (caso de baloncesto y cotización por WhatsApp)
 aviso-de-privacidad.html   Aviso de privacidad
 404.html                   Página de error
-.htaccess                  Página 404 y redirecciones de las rutas anteriores (/servicios, /contacto)
+.htaccess                  Página 404 y redirecciones de las rutas anteriores (/servicios, /contacto, /proyectos): no usar esos nombres para páginas nuevas
 css/styles.css             Estilos (naranja #E46038, negro, gris cálido)
 js/config.js               Número de WhatsApp (editar aquí)
-js/main.js                 Menú, filtro de casos y formulario
+js/main.js                 Menú, filtro de casos, formularios, animaciones de entrada y botón "Volver arriba"
 img/logo-xtres60.*         Logo oficial (tomado de la página de Facebook)
 robots.txt, sitemap.xml    SEO
 ```
+
+## Páginas publicadas
+- / (index.html)
+- /redes-sociales.html
+- /desarrollo-web.html
+- /produccion-audiovisual.html
+- /aviso-de-privacidad.html
+
+Todas las páginas de servicio tienen el bloque "También te puede interesar" con las otras dos y los casos de éxito.
 
 ## Datos usados (de Facebook y del sitio anterior)
 - Holbein 135, Col. Noche Buena, Benito Juárez, CDMX 03720

@@ -274,3 +274,31 @@ button, input, select, textarea { font: inherit; }
 .related-card strong { font-family: var(--font-display); font-size: 23px; font-weight: 700; }
 .related-text { color: var(--muted); font-size: 15px; line-height: 1.6; flex: 1; }
 .related-go { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; color: var(--orange-2); }
+
+/* Mejora de interfaz final (20 nov 2026) */
+/* Menú: con 7 enlaces se colapsa antes para que no se encime */
+@media (max-width: 1240px) {
+  .main-nav { position: absolute; top: 72px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 24px 16px; display: none; }
+  .main-nav.is-open { display: flex; }
+  .main-nav a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .main-nav a[aria-current="page"] { box-shadow: none; color: var(--orange-2); }
+  .menu-toggle { display: inline-flex; }
+}
+@media (min-width: 1241px) and (max-width: 1400px) { .main-nav { gap: 22px; } }
+.main-nav a { white-space: nowrap; }
+
+/* Animaciones de entrada (solo con JS y sin movimiento reducido) */
+.js-reveal .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.js-reveal .reveal.is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal { opacity: 1; transform: none; transition: none; }
+}
+@media print { .js-reveal .reveal { opacity: 1; transform: none; } }
+
+/* Botón "Volver arriba": encima del WhatsApp flotante y de la barra móvil */
+.to-top { position: fixed; right: 31px; bottom: 100px; z-index: 59; width: 48px; height: 48px; border-radius: 50%; border: 1px solid #3A3A40; background: rgba(24,24,26,.92); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 22px rgba(0,0,0,.35); transition: border-color .15s ease, color .15s ease; }
+.to-top:hover { border-color: var(--orange); color: var(--orange-2); }
+.to-top[hidden] { display: none; }
+@media (max-width: 640px) {
+  .to-top { right: 16px; bottom: calc(86px + env(safe-area-inset-bottom)); width: 44px; height: 44px; }
+}

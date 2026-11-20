@@ -192,3 +192,107 @@
     window.open(url, '_blank', 'noopener');
   });
 })();
+
+// Formulario de cotización de producción audiovisual (produccion-audiovisual.html)
+(function () {
+  'use strict';
+  var form = document.getElementById('av-form');
+  if (!form) return;
+  var cfg = window.X3_CONFIG || {};
+  var number = String(cfg.whatsapp || '').replace(/\D/g, '');
+  var fields = document.getElementById('av-fields');
+  var success = document.getElementById('av-success');
+  var error = document.getElementById('av-error');
+  var retry = document.getElementById('av-retry');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = form.nombre.value.trim();
+    var tel = form.whatsapp.value.replace(/\D/g, '');
+    var okNombre = nombre.length >= 2;
+    var okTel = tel.length >= 10;
+    form.nombre.setAttribute('aria-invalid', String(!okNombre));
+    form.whatsapp.setAttribute('aria-invalid', String(!okTel));
+    if (!(okNombre && okTel)) {
+      error.hidden = false;
+      (okNombre ? form.whatsapp : form.nombre).focus();
+      return;
+    }
+    error.hidden = true;
+    var tipos = Array.prototype.filter.call(form.querySelectorAll('.chip'), function (c) {
+      return c.getAttribute('aria-pressed') === 'true';
+    }).map(function (c) { return c.textContent.trim(); });
+    var marca = form.marca.value.trim();
+    var fecha = form.fecha.value.trim();
+    var mensaje = form.mensaje.value.trim();
+    var text = 'Hola XTres60, quiero cotizar producción audiovisual.\n' +
+      'Nombre: ' + nombre + '\n' +
+      (marca ? 'Empresa: ' + marca + '\n' : '') +
+      'WhatsApp: ' + tel + '\n' +
+      'Necesito: ' + (tipos.length ? tipos.join(', ') : 'Por definir') +
+      (fecha ? '\nFecha: ' + fecha : '') +
+      (mensaje ? '\nProyecto: ' + mensaje : '');
+    var url = 'https://wa.me/' + number + '?text=' + encodeURIComponent(text);
+    if (retry) retry.href = url;
+    fields.hidden = true;
+    success.hidden = false;
+    window.open(url, '_blank', 'noopener');
+  });
+})();
+
+// Animaciones de entrada al hacer scroll. Solo se activan si el navegador
+// soporta IntersectionObserver y no se pidió reducir el movimiento; sin JS
+// todo el contenido queda visible.
+(function () {
+  'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) return;
+  var items = document.querySelectorAll('main .section-head, main .service, main .case, main .process li, main .why > div, main .related-card, main .contact-card');
+  if (!items.length) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        en.target.classList.add('is-visible');
+        io.unobserve(en.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+  Array.prototype.forEach.call(items, function (el) {
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+  document.documentElement.classList.add('js-reveal');
+  // Respaldo: si algo falla, a los 4 s se muestra todo
+  window.setTimeout(function () {
+    Array.prototype.forEach.call(items, function (el) { el.classList.add('is-visible'); });
+  }, 4000);
+})();
+
+// Botón "Volver arriba" (solo en páginas largas)
+(function () {
+  'use strict';
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'to-top';
+  btn.setAttribute('aria-label', 'Volver arriba');
+  btn.hidden = true;
+  btn.innerHTML = '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  document.body.appendChild(btn);
+  btn.addEventListener('click', function () {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    var skip = document.querySelector('.brand');
+    if (skip) skip.focus({ preventScroll: true });
+  });
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var long = document.documentElement.scrollHeight > window.innerHeight * 2.5;
+    btn.hidden = !(long && window.scrollY > window.innerHeight);
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
